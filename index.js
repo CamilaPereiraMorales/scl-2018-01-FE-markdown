@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
-const algo = require('./md-links.js')
+const traer = require('./md-links.js')
 const [, , ...args] = process.argv; //es el arreglo donde se guarda lo que el usuario ponga
-console.log(args);
+// console.log(args[0]);
+// console.log(args[1]);
 
-algo.suma(1, 3);
-algo.resta(5, 1);
+traer.rutaAbsoluta(args[0]);
+// console.log(args);
