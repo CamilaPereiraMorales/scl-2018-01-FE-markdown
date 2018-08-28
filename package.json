@@ -1,0 +1,32 @@
+{
+    "name": "markdown",
+    "version": "0.0.1",
+    "description": "markdown",
+    "main": "index.js",
+    "bin": {
+        "md-links": "index.js"
+    },
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CamilaPereiraMorales/scl-2018-01-FE-markdown.git"
+    },
+    "keywords": [
+        "markdown",
+        "link"
+    ],
+    "author": "Camili",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/CamilaPereiraMorales/scl-2018-01-FE-markdown/issues"
+    },
+    "homepage": "https://github.com/CamilaPereiraMorales/scl-2018-01-FE-markdown#readme",
+    "devDependencies": {
+        "eslint": "^5.4.0"
+    }
+}
