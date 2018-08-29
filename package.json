@@ -28,5 +28,8 @@
     "homepage": "https://github.com/CamilaPereiraMorales/scl-2018-01-FE-markdown#readme",
     "devDependencies": {
         "eslint": "^5.4.0"
+    },
+    "dependencies": {
+        "marked": "^0.5.0"
     }
 }
