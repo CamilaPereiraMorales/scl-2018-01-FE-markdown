@@ -1,12 +1,12 @@
 //funcion para que vuelva ruta absoluta, la ruta que entrega user
 const path = require("path");
 const fs = require('fs');
+const fetch = require("node-fetch");
 
+const route = path.resolve("./README.md"); //vuelve la ruta ingresada por el user, una ruta absoluta
+console.log(route);
 
-const rutaLista = path.resolve("./README.md");
-console.log(rutaLista);
-
-fs.readFile(rutaLista, 'utf-8', (err, data) => {
+fs.readFile(route, 'utf-8', (err, data) => { //lee archivo
     if (err) throw err;
     markdownLinkExtractor(data);
     // console.log(data);
@@ -47,13 +47,25 @@ function markdownLinkExtractor(markdown) {
         });
     };
     Marked(markdown, { renderer: renderer });
-    console.log(links);
-
+    // console.log(links);
+    validateLinks(links)
     return links;
+
+};
+
+function validateLinks(links) { //valida el estado de los links
+    links.forEach(element => {
+        let url = element.href
+        fetch(url).then(response => response).then(data => {
+            console.log(data.statusText, data.status, data.url.substring(0, 50)); //trunca el link a 50 caracteres
+        }).catch(error => {
+            console.log(error);
+        });
+    })
 };
 
 
-// function verificar(rutaLista) {
+// function verificarExtension(rutaLista) {
 //     const patron = ".md";
 //     const rutaVerificada = (rutaLista.substring(rutaLista.lastIndexOf("."))).toLowerCase();
 //     if (rutaVerificada === patron) {
@@ -67,5 +79,5 @@ function markdownLinkExtractor(markdown) {
 // };
 
 module.exports = {
-    // rutaAbsoluta
+
 };
