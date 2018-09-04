@@ -3,39 +3,14 @@ const path = require("path");
 const fs = require('fs');
 const fetch = require("node-fetch");
 
-//console.log(route);
-function mdLinks(file, options) {
-    return new Promise((resolve, reject) => {
-        // route = path.resolve("./README.md");
-        //console.log(route);
-        let route = path.resolve(file); //vuelve la ruta ingresada por el user, una ruta absoluta
+const route = path.resolve("./README.md"); //vuelve la ruta ingresada por el user, una ruta absoluta
+console.log(route);
 
-        fs.readFile(route, 'utf-8', (err, data) => { //lee archivo
-            if (err) throw err;
-            //markdownLinkExtractor(data);
-            let dataSplit = data.split("\n"); //separa 
-            //console.log(data.split("\n"));
-            dataSplit = dataSplit.map(element => { //me devulve un nuevo arreglo
-                let linea = (dataSplit.indexOf(element) + 1); //guarda la linea
-                // console.log(linea) //numero de linea de cada link
-                // console.log(markdownLinkExtractor(element, data, linea));
-                return markdownLinkExtractor(element, linea)
-            });
-            dataSplit = dataSplit.filter(element => element.length !== 0); //filtra los elementos 
-
-            dataSplit = dataSplit.reduce((element1, element2) => element1.concat(element2))
-            resolve(dataSplit);
-
-            validateLinks(dataSplit).then(values => {
-                //  console.log(values);
-
-            })
-        });
-    })
-
-
-}
-
+fs.readFile(route, 'utf-8', (err, data) => { //lee archivo
+    if (err) throw err;
+    markdownLinkExtractor(data);
+    // console.log(data);
+});
 
 
 const Marked = require('marked');
@@ -43,7 +18,7 @@ const Marked = require('marked');
 // Función necesaria para extraer los links usando marked
 // (tomada desde biblioteca del mismo nombre y modificada para el ejercicio)
 // Recibe texto en markdown y retorna sus links en un arreglo
-function markdownLinkExtractor(markdown, linea) {
+function markdownLinkExtractor(markdown) {
     const links = [];
 
     const renderer = new Marked.Renderer();
@@ -60,7 +35,6 @@ function markdownLinkExtractor(markdown, linea) {
             href: href,
             text: text,
             title: title,
-            linea: linea
         });
     };
     renderer.image = function(href, title, text) {
@@ -70,46 +44,24 @@ function markdownLinkExtractor(markdown, linea) {
             href: href,
             text: text,
             title: title,
-            linea: linea
         });
-
-
     };
     Marked(markdown, { renderer: renderer });
-    //console.log(links);
-
+    // console.log(links);
+    validateLinks(links)
     return links;
 
 };
 
 function validateLinks(links) { //valida el estado de los links
-    return new Promise((resolve, reject) => {
-        let validate = []
-        links.forEach(element => {
-                let url = element.href //guarda el href del elemento
-
-                validate.push(fetch(url).then(response => response).then(data => { //pego validate a mi objeto
-                    //console.log(data.statusText, data.status, data.linea, data.url.substring(0, 50)); //trunca el link a 50 caracteres
-                    element.status = data.status
-                    return element
-                        //console.log(element);
-
-                }).catch(error => {
-                    // console.log(error);
-                }));
-
-
-            })
-            //console.log(validate);
-        Promise.all(validate).then(values => {
-            resolve(values); //ya puedo devolver, estan los valores de las promesas juntos
-            // console.log(values);
-
-
-        })
-
+    links.forEach(element => {
+        let url = element.href
+        fetch(url).then(response => response).then(data => {
+            console.log(data.statusText, data.status, data.url.substring(0, 50)); //trunca el link a 50 caracteres
+        }).catch(error => {
+            console.log(error);
+        });
     })
-
 };
 
 
@@ -127,5 +79,5 @@ function validateLinks(links) { //valida el estado de los links
 // };
 
 module.exports = {
-    mdLinks
+
 };
